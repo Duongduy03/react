@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
-const ListProduct = () => {
+import { remove } from "../../../api/product";
+import Message from "../../../components/message";
+import { MessageContext } from "../../../store/message-context";
+const ListProduct = (props: any) => {
+  const [products, setProduct] = useState([]);
+  useEffect(() => {
+    setProduct(props.products);
+  }, [props]);
+  // console.log(products);
+
+  // console.log(props.products);
+  const removeProduct = (id: number | string) => {
+    const conf = window.confirm("Bạn có chắc muốn xóa không ?");
+    const newPro = products.filter((product: any) => product._id !== id);
+
+    if (conf) {
+      remove(String(id))
+        .then(() => setProduct(newPro))
+        .then(() => alert("Xóa thành công"));
+    }
+  };
   return (
     <div>
       <section id="content">
@@ -51,26 +71,33 @@ const ListProduct = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Duong Văn Duy</td>
-                  <td>100</td>
-                  <td>
-                    <img
-                      style={{ width: 100 }}
-                      src="{{ product.image }}"
-                      alt=""
-                    />
-                  </td>
-                  <td>Duy đẹp trai</td>
-                  <td>
-                    <Link to="/admin/products/update/{{ product._id }}">
-                      <i className="bx bx-edit-alt"></i>
-                    </Link>
+                {products.map((product: any, index: number) => {
+                  return (
+                    <tr key={product._id}>
+                      <td>{index + 1}</td>
+                      <td>{product.name}</td>
+                      <td>{product.price}</td>
+                      <td>
+                        <img
+                          style={{ width: 100 }}
+                          src={product.image}
+                          alt=""
+                        />
+                      </td>
+                      <td>{product.description}</td>
+                      <td>
+                        <Link to={`/admin/products/update/${product._id}`}>
+                          <i className="bx bx-edit-alt"></i>
+                        </Link>
 
-                    <i className="bx bxs-trash"></i>
-                  </td>
-                </tr>
+                        <i
+                          className="bx bxs-trash"
+                          onClick={() => removeProduct(product._id)}
+                        ></i>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
