@@ -25,6 +25,11 @@ import UpdateCategory from "./pages/admin/categories/UpdateCategory";
 import ProductDetail from "./pages/client/products/ProductDetail";
 import { add, getAll, remove, update } from "./api/product";
 import { addCate, getAllCate, removeCate, updateCate } from "./api/category";
+import ForgotPassWord from "./pages/client/ForgotPassword";
+import ResetPassword from "./pages/client/ResetPassword";
+import Customer from "./pages/client/Customer";
+import Cart from "./pages/client/cart/Cart";
+import PayNow from "./pages/client/cart/PayNow";
 // import "./App.css";
 
 function App() {
@@ -83,6 +88,12 @@ function App() {
         { path: "/about", element: <About /> },
         { path: "/blog", element: <Blogs /> },
         { path: "/contact", element: <Contact /> },
+        // Information
+        { path: "customer", element: <Customer /> },
+
+        // Cart
+        { path: "/pay", element: <PayNow /> },
+        { path: "/cart", element: <Cart /> },
       ],
     },
     // Admin
@@ -142,6 +153,8 @@ function App() {
     { path: "*", element: <NotFound /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
+    { path: "/forgot-password", element: <ForgotPassWord /> },
+    { path: "/reset-password/:id", element: <ResetPassword /> },
   ]);
   return <RouterProvider router={router} />;
 }

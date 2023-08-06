@@ -1,7 +1,9 @@
 import React, { useContext, useReducer, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MessageContext } from "../../../store/message-context";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import type { UploadProps } from "antd";
 import { addCate } from "../../../api/category";
 import { useNavigate } from "react-router-dom";
 // type FormDataType = {
@@ -64,6 +66,7 @@ const AddProduct = (props: any) => {
   useEffect(() => {
     setCategory(props.categories);
   }, [props]);
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
@@ -73,9 +76,9 @@ const AddProduct = (props: any) => {
     // values.image = values.image.trim();
     // values.description = values.description.trim();
 
-    await props.handleAdd(values);
-    // console.log(values);
-    navigate("/admin/products");
+    // await props.handleAdd(values);
+    console.log(values);
+    // navigate("/admin/products");
     setMessage({
       type: "success",
       message: "Thêm mới sản phẩm thành công",
@@ -164,6 +167,7 @@ const AddProduct = (props: any) => {
               onFinish={onHandleAdd}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
+              encType="multipart/form-data"
             >
               <Form.Item
                 label="Product Name"
@@ -186,23 +190,42 @@ const AddProduct = (props: any) => {
                 <Input type="number" />
               </Form.Item>
               <Form.Item
-                label="Image"
-                name="image"
-                rules={[{ required: true, message: "Bạn chưa nhập link ảnh!" }]}
+                label="Original Price"
+                name="originalPrice"
+                rules={[
+                  { required: true, message: "Bạn chưa nhập giá!" },
+                  { pattern: /^(?:\d*)$/, message: "Giá bạn nhập phải là số" },
+                ]}
               >
-                <Input />
+                <Input type="number" />
               </Form.Item>
               <Form.Item
-                label="Image 1"
-                name="image1"
-                rules={[{ required: true, message: "Bạn chưa nhập link ảnh!" }]}
+                label="Image"
+                name="image"
+                rules={[
+                  { required: true, message: "Link ảnh không được để trống !" },
+                ]}
               >
-                <Input />
+                <Input type="file" multiple />
               </Form.Item>
               <Form.Item
                 label="Description"
                 name="description"
                 rules={[{ required: true, message: "Bạn chưa nhập mô tả!" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Color"
+                name="color"
+                rules={[{ required: true, message: "Bạn chưa nhập màu sắc!" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Size"
+                name="size"
+                rules={[{ required: true, message: "Bạn chưa nhập size!" }]}
               >
                 <Input />
               </Form.Item>

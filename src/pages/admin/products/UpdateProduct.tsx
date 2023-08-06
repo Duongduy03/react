@@ -29,11 +29,11 @@ const UpdateProduct = (props: any) => {
   const setFields = () => {
     form.setFieldsValue({
       _id: product?._id,
-      name: product?.name,
+      productName: product?.productName,
       price: product?.price,
       description: product?.description,
       image: product?.image,
-      image1: product?.image1,
+
       categoryId: product?.categoryId,
     });
   };
@@ -106,7 +106,7 @@ const UpdateProduct = (props: any) => {
               </Form.Item>
               <Form.Item
                 label="Product Name"
-                name="name"
+                name="productName"
                 rules={[
                   {
                     required: true,
@@ -145,15 +145,7 @@ const UpdateProduct = (props: any) => {
               >
                 <Input />
               </Form.Item>
-              <Form.Item
-                label="Image1"
-                name="image1"
-                rules={[
-                  { required: true, message: "Ảnh không được để trống!" },
-                ]}
-              >
-                <Input />
-              </Form.Item>
+
               <Form.Item
                 name="categoryId"
                 label="Danh mục"

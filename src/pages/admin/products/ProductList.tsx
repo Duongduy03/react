@@ -65,6 +65,8 @@ const ListProduct = (props: any) => {
                   <th>Id</th>
                   <th>Product Name</th>
                   <th>Price</th>
+                  <th>Color</th>
+                  <th>Size</th>
                   <th>Image</th>
                   <th>Description</th>
                   <th>Action</th>
@@ -75,12 +77,14 @@ const ListProduct = (props: any) => {
                   return (
                     <tr key={product._id}>
                       <td>{index + 1}</td>
-                      <td>{product.name}</td>
+                      <td>{product.productName}</td>
                       <td>{product.price}</td>
+                      <td>{product.color}</td>
+                      <td>{product.size}</td>
                       <td>
                         <img
                           style={{ width: 100 }}
-                          src={product.image}
+                          src={product.image[0].url}
                           alt=""
                         />
                       </td>

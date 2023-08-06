@@ -494,6 +494,7 @@
 }
 .big-img img {
   width: inherit;
+  height: 409px;
 }
 .images {
   display: flex;
@@ -610,4 +611,7 @@
 }
 .buy-btn:hover {
   background-color: #0066ff;
+}
+.input {
+  outline: none;
 }

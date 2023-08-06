@@ -77,13 +77,13 @@ const ProductList = (props: any) => {
                     <div className="product-item" key={product._id}>
                       <div className="product-image">
                         <img
-                          src={product.image}
+                          src={product.image[0]?.url}
                           alt=""
                           className="product-img"
                         />
                         <div className="opacity">
                           <img
-                            src={product.image1}
+                            src={product.image[1]?.url}
                             alt=""
                             className="product-img1"
                           />
@@ -100,7 +100,7 @@ const ProductList = (props: any) => {
                         <h4>Shirts</h4>
                         <img src="/src/assets/images/star.svg" alt="" />
                       </div>
-                      <h3 className="product-name">{product.name}</h3>
+                      <h3 className="product-name">{product.productName}</h3>
                       <div className="product-top">
                         <h3>$ {product.price}</h3>
                         <img src="/src/assets/images/circle.svg" alt="" />
@@ -121,13 +121,13 @@ const ProductList = (props: any) => {
                     <div className="product-item" key={product._id}>
                       <div className="product-image">
                         <img
-                          src={product.image}
+                          src={product.image[0]?.url}
                           alt=""
                           className="product-img"
                         />
                         <div className="opacity">
                           <img
-                            src={product.image1}
+                            src={product.image[1]?.url}
                             alt=""
                             className="product-img1"
                           />
@@ -144,7 +144,7 @@ const ProductList = (props: any) => {
                         <h4>Shirts</h4>
                         <img src="/src/assets/images/star.svg" alt="" />
                       </div>
-                      <h3 className="product-name">{product.name}</h3>
+                      <h3 className="product-name">{product.productName}</h3>
                       <div className="product-top">
                         <h3>$ {product.price}</h3>
                         <img src="/src/assets/images/circle.svg" alt="" />

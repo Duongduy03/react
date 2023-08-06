@@ -1,23 +1,38 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../assets/css/login.css";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { signup } from "../../redux/authSlice";
 import { useForm } from "react-hook-form";
-import { useAppDispatch } from "../../store";
 import { Button, Checkbox, Form, Input, message } from "antd";
-import { registerUser } from "../../api/auth";
-type RegisterForm = {
-  name: string;
-  address: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  num_phone: string;
-};
-const Register = () => {
+import {
+  forgotPassword,
+  login,
+  registerUser,
+  resetPassword,
+} from "../../api/auth";
+import type { FormInstance } from "antd/es/form";
+import { authenticate } from "../../utils/localStorage";
+// import { isAuthenticate } from "../../utils/localStorage";
+
+const ResetPassword = () => {
+  const { id } = useParams();
+  const [form] = Form.useForm();
+  const formRef = React.useRef<FormInstance>(null);
+  const setFields = () => {
+    form.setFieldsValue({
+      token: id,
+    });
+  };
+  //   console.log(setFields());
+
+  useEffect(() => {
+    setFields();
+  }, []);
+
   const navigate = useNavigate();
+
+  console.log(id);
+
   const user = JSON.parse(localStorage.getItem("user") as string);
   console.log(user);
   if (user !== null || user) {
@@ -33,14 +48,15 @@ const Register = () => {
           duration: 2,
         });
         if (loading) {
-          const res: any = await registerUser(values);
+          const res = await resetPassword(values);
           if (res) {
-            message.success("Tạo thành công", 3);
+            message.success(" Thay đổi mật khẩu thành công", 2);
             navigate("/login");
           }
         }
+        console.log(values);
       } catch (error: any) {
-        message.error(error.response.data.message, 5);
+        message.error(error.response.data.messages, 5);
       }
     }
   };
@@ -68,6 +84,8 @@ const Register = () => {
                     <Form
                       // style={{ maxWidth: 6000 }}
                       className="mt-3 px-3 py-5 w-[400px] mx-[auto]"
+                      form={form}
+                      ref={formRef}
                       name="form_item_path"
                       layout="vertical"
                       onFinish={onFinish}
@@ -79,104 +97,21 @@ const Register = () => {
                         aria-label="Login to your account"
                         className="text-2xl font-extrabold leading-6 text-gray-800 mb-8"
                       >
-                        Đăng ký
+                        Thay đổi mật khẩu
                       </h1>
                       <Form.Item
+                        hidden
                         className="text-black font-bold"
-                        rules={[
-                          {
-                            message: "Vui lòng nhập name!",
-                            required: true,
-                          },
-                          {
-                            validator: (_: any, value: string) =>
-                              value && value.trim() == ""
-                                ? Promise.reject(
-                                    new Error(
-                                      "Tên người dùng không được bỏ trống"
-                                    )
-                                  )
-                                : Promise.resolve(),
-                          },
-                        ]}
-                        name="name"
-                        label="Name"
-                      >
-                        <Input
-                          className="font-mono border border-indigo-600 h-10"
-                          placeholder="Nhập name"
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="text-black font-bold"
-                        rules={[
-                          {
-                            message: "Vui lòng nhập địa chỉ!",
-                            required: true,
-                          },
-                          {
-                            validator: (_: any, value: string) =>
-                              value && value.trim() == ""
-                                ? Promise.reject(
-                                    new Error("Địa chỉ không được bỏ trống")
-                                  )
-                                : Promise.resolve(),
-                          },
-                        ]}
-                        name="address"
-                        label="Address"
-                      >
-                        <Input
-                          className="font-mono border border-indigo-600 h-10"
-                          placeholder="Nhập địa chỉ"
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="text-black font-bold"
-                        rules={[
-                          {
-                            message: "Vui lòng nhập số điện thoại!",
-                            required: true,
-                          },
-                          {
-                            pattern: /^(?:\d*)$/,
-                            message: "Số điện thoại bạn nhập phải là số",
-                          },
-                          {
-                            validator: (_: any, value: string) =>
-                              value && value.trim() == ""
-                                ? Promise.reject(
-                                    new Error(
-                                      "Số điện thoại không được bỏ trống"
-                                    )
-                                  )
-                                : Promise.resolve(),
-                          },
-                        ]}
-                        name="num_phone"
-                        label="Phone Number"
-                      >
-                        <Input
-                          className="font-mono border border-indigo-600 h-10"
-                          placeholder="Nhập số điện thoại"
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="text-black font-bold"
-                        name="email"
-                        label="Email"
+                        name="token"
+                        label="Token"
                         rules={[
                           {
                             message: "Vui lòng nhập email!",
                             required: true,
-                            type: "email",
                           },
                         ]}
                       >
-                        <Input
-                          className="font-mono border border-indigo-600 h-10"
-                          placeholder="Nhập email"
-                        />
+                        <Input className="font-mono border border-indigo-600 h-10" />
                       </Form.Item>
                       <Form.Item
                         className="text-black font-bold"
@@ -186,6 +121,9 @@ const Register = () => {
                           {
                             message: "Vui lòng nhập password!",
                             required: true,
+                          },
+                          {
+                            message: "Password phải trên 6 kí tự!",
                             min: 6,
                           },
                           {
@@ -252,19 +190,6 @@ const Register = () => {
                         />
                       </Form.Item>
 
-                      <p className="text-sm mt-4 font-medium leading-none text-gray-500">
-                        Ban đã có tài khoản?{" "}
-                        <span
-                          tabIndex={0}
-                          role="link"
-                          aria-label="Sign up here"
-                          className="text-sm font-medium leading-none underline text-gray-800 cursor-pointer"
-                        >
-                          {" "}
-                          <Link to="/login">Đăng nhập tại đây</Link>
-                        </span>
-                      </p>
-
                       <Button type="primary" htmlType="submit">
                         Submit
                       </Button>
@@ -280,4 +205,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ResetPassword;

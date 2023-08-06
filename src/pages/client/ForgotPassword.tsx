@@ -4,7 +4,7 @@ import "../../assets/css/login.css";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 import { Button, Checkbox, Form, Input, message } from "antd";
-import { login, registerUser } from "../../api/auth";
+import { forgotPassword, login, registerUser } from "../../api/auth";
 import { authenticate } from "../../utils/localStorage";
 // import { isAuthenticate } from "../../utils/localStorage";
 type RegisterForm = {
@@ -15,7 +15,7 @@ type RegisterForm = {
   confirmPassword: string;
   num_phone: string;
 };
-const Login = () => {
+const ForgotPassWord = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") as string);
   console.log(user);
@@ -32,25 +32,14 @@ const Login = () => {
           duration: 2,
         });
         if (loading) {
-          const res: any = await login(values);
+          const res = await forgotPassword(values);
           if (res) {
-            message.success("Đăng nhập thành công", 3);
-            // console.log(res.data);
-
-            localStorage.setItem("accessToken", res.data.accessToken);
-            localStorage.setItem("user", JSON.stringify(res.data.user));
-            authenticate(res.data.user, () => {
-              res.data.user.role === "admin"
-                ? navigate("/admin")
-                : navigate("/");
-
-              // window.location.reload();
-            });
-            // navigate("/");
+            message.success("Chúng tôi đã gửi mail về cho bạn", 2);
           }
         }
+        console.log(values);
       } catch (error: any) {
-        message.error(error.response.data.messages, 5);
+        message.error(error.response.data.message, 5);
       }
     }
   };
@@ -89,7 +78,7 @@ const Login = () => {
                         aria-label="Login to your account"
                         className="text-2xl font-extrabold leading-6 text-gray-800 mb-8"
                       >
-                        Đăng nhập
+                        Nhập email để lấy lại mật khẩu
                       </h1>
 
                       <Form.Item
@@ -109,48 +98,6 @@ const Login = () => {
                           placeholder="Nhập email"
                         />
                       </Form.Item>
-                      <Form.Item
-                        className="text-black font-bold"
-                        name="password"
-                        label="Mật khẩu"
-                        rules={[
-                          {
-                            message: "Vui lòng nhập password!",
-                            required: true,
-                            min: 6,
-                          },
-                          {
-                            validator: (_: any, value: string) =>
-                              value && value.trim() == ""
-                                ? Promise.reject(
-                                    new Error("Mật khẩu không được bỏ trống")
-                                  )
-                                : Promise.resolve(),
-                          },
-                        ]}
-                      >
-                        <Input.Password
-                          type="password"
-                          className="font-mono border border-indigo-600 h-10"
-                          placeholder="Nhập password"
-                          iconRender={(visible) =>
-                            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                          }
-                        />
-                      </Form.Item>
-
-                      <Link
-                        to={`/forgot-password`}
-                        className="small text-muted"
-                      >
-                        Forgot password?
-                      </Link>
-                      <p className="mb-5 pb-lg-2 register">
-                        Don't have an account?
-                        <Link to="/register" className="register">
-                          Register here
-                        </Link>
-                      </p>
 
                       <Button type="primary" htmlType="submit">
                         Submit
@@ -167,4 +114,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassWord;
