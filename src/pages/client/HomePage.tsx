@@ -9,6 +9,8 @@ const HomePage = () => {
   useEffect(() => {
     getAll().then((data) => setProduct(data.docs));
   }, []);
+  console.log(products);
+
   return (
     <div>
       <article>
@@ -176,10 +178,14 @@ const HomePage = () => {
                 return (
                   <div className="product-item" key={product._id}>
                     <div className="product-image">
-                      <img src={product.image} alt="" className="product-img" />
+                      <img
+                        src={product.image[0].url}
+                        alt=""
+                        className="product-img"
+                      />
                       <div className="opacity">
                         <img
-                          src={product.image1}
+                          src={product.image[1]?.url}
                           alt=""
                           className="product-img1"
                         />
@@ -196,7 +202,7 @@ const HomePage = () => {
                         <h4>Shirts</h4>
                         <img src="/src/assets/images/star.svg" alt="" />
                       </div>
-                      <h3 className="product-name">{product.name}</h3>
+                      <h3 className="product-name">{product.productName}</h3>
                       <div className="product-top">
                         <h3>$ {product.price}</h3>
                         <img src="/src/assets/images/circle.svg" alt="" />

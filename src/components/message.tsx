@@ -15,6 +15,8 @@ let timer: number;
 
 const Message = ({ content, duration = 3000, onClose }: Props) => {
   const [visible, setVisible] = useState(false);
+  // console.log(content);
+  // console.log(visible);
 
   useEffect(() => {
     setVisible(true);
@@ -27,9 +29,10 @@ const Message = ({ content, duration = 3000, onClose }: Props) => {
       clearTimeout(timer);
     };
   }, [content]);
+  // console.log(content.message);
 
   return createPortal(
-    <Content visable={visible ? "1" : "0"} type={content.type}>
+    <Content visible={visible ? "1" : "0"} type={content.type}>
       {content.message}
     </Content>,
     document.body
@@ -39,11 +42,12 @@ const Message = ({ content, duration = 3000, onClose }: Props) => {
 export default Message;
 
 const Content = styled.div<{
-  visable: string;
+  visible: string;
   type: string;
 }>`
+  z-index: 2000;
   position: fixed;
-  top: 10px;
+  top: 56px;
   left: 50%;
   transform: translateX(-50%);
   padding: 0.5rem;
@@ -52,7 +56,7 @@ const Content = styled.div<{
   color: #fff;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
-  opacity: ${(props) => props.visable};
+  opacity: ${(props) => props.visible};
   background-color: ${(props) =>
     props.type === "success" ? "#52c41a" : "#f5222d"};
 `;

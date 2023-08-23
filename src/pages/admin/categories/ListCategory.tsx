@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-const ListCategory = () => {
+// import { removeCate } from "../../../api/category";
+const ListCategory = (props: any) => {
+  const [categories, setCategory] = useState([]);
+  useEffect(() => {
+    setCategory(props.categories);
+  }, [props]);
+  // console.log(categories);
+
+  // console.log(props.products);
+  const removeCategory = (id: number | string) => {
+    props.handleRemove(id);
+  };
   return (
     <div>
       <section id="content">
@@ -49,18 +60,25 @@ const ListCategory = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Duong Văn Duy</td>
+                {categories?.map((category: any, index) => {
+                  return (
+                    <tr key={category._id}>
+                      <td>{index + 1}</td>
+                      <td>{category.name}</td>
 
-                  <td>
-                    <Link to="/admin/categories/update/{{ product._id }}">
-                      <i className="bx bx-edit-alt"></i>
-                    </Link>
+                      <td>
+                        <Link to={`/admin/categories/update/${category._id}`}>
+                          <i className="bx bx-edit-alt"></i>
+                        </Link>
 
-                    <i className="bx bxs-trash"></i>
-                  </td>
-                </tr>
+                        <i
+                          className="bx bxs-trash"
+                          onClick={() => removeCategory(category._id)}
+                        ></i>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

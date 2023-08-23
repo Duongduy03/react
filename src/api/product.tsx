@@ -13,7 +13,7 @@ const add = async (product: any) => {
   return res;
 };
 const update = async (product: any) => {
-  const res = await instance.get(`/products/update/${product._id}`, product);
+  const res = await instance.patch(`/products/update/${product._id}`, product);
   return res;
 };
 const remove = async (id: string) => {
